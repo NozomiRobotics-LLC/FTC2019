@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.actuators;
 
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 /**
  * Created by LBYPatrick on 11/9/2017.
@@ -25,6 +26,14 @@ public class MotorControl {
 
     public MotorControl(DcMotor dcMotorObj) {
         this(dcMotorObj, true);
+    }
+
+    public MotorControl(HardwareMap hwMap, String deviceName) {
+        this(hwMap.dcMotor.get(deviceName));
+    }
+
+    public MotorControl(HardwareMap hwMap, String deviceName, boolean isForward) {
+        this(hwMap.dcMotor.get(deviceName),isForward);
     }
 
     private double getLimitedSpeed(double rawSpeed) {return rawSpeed * speedLimit;}

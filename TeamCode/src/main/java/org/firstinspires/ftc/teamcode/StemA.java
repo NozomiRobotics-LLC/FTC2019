@@ -23,7 +23,7 @@ public class StemA extends LinearOpMode {
         Controller gp1 = new Controller(gamepad1);
 
         MotorControl intake = new MotorControl(hardwareMap, "intake");
-        MotorControl lift   = new MotorControl (ha
+        MotorControl lift   = new MotorControl (hardwareMap, "lift");
 
         telemetry.addData("Sucessfully Initialized.", "");
         telemetry.update();
@@ -31,8 +31,12 @@ public class StemA extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        for (opModeIsActive()) {
-
+        while (opModeIsActive()) {
+            //Do stuff here
         }
+
+        telemetry.addLine("Robot Stopped");
+        telemetry.update();
+
     }
 }

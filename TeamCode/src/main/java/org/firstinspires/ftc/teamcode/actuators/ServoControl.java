@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.actuators;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
@@ -32,6 +33,11 @@ final public class ServoControl {
         servo.setDirection((isForward?Servo.Direction.FORWARD : Servo.Direction.REVERSE));
         isClockWise = isForward;
     }
+
+    public ServoControl(HardwareMap hwMap, String deviceName, boolean isForward, double min, double max) {
+        this(hwMap.servo.get(deviceName), isForward,min,max);
+    }
+
     public void moveWithButton(boolean inward) {
 
         final double currentPosBuffer = servo.getPosition();
