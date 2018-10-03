@@ -3,6 +3,6 @@ language: android
 android:
   components:
     - build-tools-27.0.3
-    - android-23
+    - android-25
     - extra
     - addon
