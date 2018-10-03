@@ -1,12 +1,8 @@
-sudo : required
 dist : trusty
 language: android
-install: sudo mkdir /usr/local/android-sdk/licenses && sudo cp sdk_license/* /usr/local/android-sdk/licenses/
 android:
   components:
-    - build-tools-25.0.3
-    - android-25
-    - extra-google-m2repository
-    - extra-android-m2repository
-    - addon-google_apis-google-19
-    - android-N
+    - build-tools-27.0.3
+    - android-23
+    - extra
+    - addon
