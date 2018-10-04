@@ -78,7 +78,7 @@ final public class Controller {
     }
 
     public boolean isKeyHeld(int key) {
-        return getValue(key) > 0;
+        return Math.abs(getValue(key)) > 0;
     }
 
     public boolean isKeysChanged(int... keys) {
@@ -116,7 +116,7 @@ final public class Controller {
      * @return true if the key is toggled, false otherwise.
      */
     public boolean isKeyToggled(int key) {
-        return isKeyChanged(key) && (getValue(key) > 0);
+        return isKeyChanged(key) && isKeyHeld(key);
     }
 
     /**

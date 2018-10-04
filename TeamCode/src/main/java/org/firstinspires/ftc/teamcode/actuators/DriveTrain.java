@@ -37,7 +37,7 @@ final public class DriveTrain {
      * Drive Mode, can be Tank, Omni or Mecanum.
      */
     public static class WheelMode {
-        final public static int TANK_WHEEL = 0;
+        final public static int NORMAL_WHEEL = 0;
         final public static int OMNI_WHEEL = 1;
         final public static int MECANUM_WHEEL = 2;
     }
@@ -113,7 +113,7 @@ final public class DriveTrain {
      */
     public void drive(double sideMove, double forwardBack, double rotation) {
         switch(wheelMode) {
-            case WheelMode.TANK_WHEEL:
+            case WheelMode.NORMAL_WHEEL:
                 tankDrive(forwardBack,rotation);
                 break;
 
