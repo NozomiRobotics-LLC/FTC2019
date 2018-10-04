@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
  * Created by LBYPatrick on 12/6/2017.
  */
 
-final public class RGBSensorControl {
+final public class LSRGB {
 
     class BallColor {
         final static int BLUE = 0;
@@ -23,7 +23,7 @@ final public class RGBSensorControl {
     public int greenVal = 0;
     private float [] hsvValue = new float[3];
 
-    public RGBSensorControl (ColorSensor device) {this.device = device;}
+    public LSRGB(ColorSensor device) {this.device = device;}
 
     public int getBallColor() {
 

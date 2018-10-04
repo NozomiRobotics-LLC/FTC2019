@@ -8,13 +8,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
  * Created by LBYPatrick on 11/9/2017.
  */
 
-public class MotorControl {
+public class LSMotor {
 
             private     double  speedLimit = 1.0;
             private     double  motorSpeed = 0;
             private     DcMotor motor;
 
-    public MotorControl(DcMotor dcMotorObj, boolean isForward) {
+    public LSMotor(DcMotor dcMotorObj, boolean isForward) {
 
         motor = dcMotorObj;
         motor.setDirection((isForward?DcMotor.Direction.FORWARD : DcMotor.Direction.REVERSE));
@@ -24,15 +24,15 @@ public class MotorControl {
         motor.setDirection(isReverse? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
     }
 
-    public MotorControl(DcMotor dcMotorObj) {
+    public LSMotor(DcMotor dcMotorObj) {
         this(dcMotorObj, true);
     }
 
-    public MotorControl(HardwareMap hwMap, String deviceName) {
+    public LSMotor(HardwareMap hwMap, String deviceName) {
         this(hwMap.dcMotor.get(deviceName));
     }
 
-    public MotorControl(HardwareMap hwMap, String deviceName, boolean isForward) {
+    public LSMotor(HardwareMap hwMap, String deviceName, boolean isForward) {
         this(hwMap.dcMotor.get(deviceName),isForward);
     }
 

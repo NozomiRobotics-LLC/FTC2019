@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.Range;
  * Created by LBYPatrick on 2017/11/3.
  */
 
-final public class DriveTrain {
+final public class LSDrive {
 
     /**
      * The positions of the wheels.
@@ -19,10 +19,10 @@ final public class DriveTrain {
         REAR_RIGHT,
     }
 
-    private              MotorControl FL                 = null;
-    private              MotorControl FR                 = null;
-    private              MotorControl BL = null;
-    private              MotorControl BR = null;
+    private LSMotor FL                 = null;
+    private LSMotor FR                 = null;
+    private LSMotor BL = null;
+    private LSMotor BR = null;
     private              double  maxSpeed           = 1.0;
     private              double  speedLevel         = 1.0;
     private              double  frontLeftPower     = 0;
@@ -43,13 +43,13 @@ final public class DriveTrain {
     }
 
     /**
-     * Constructor for 4WD Mode using MotorControl class.
+     * Constructor for 4WD Mode using LSMotor class.
      * @param frontLeftMotor front left motor.
      * @param frontRightMotor front right motor.
      * @param rearLeftMotor back left motor.
      * @param rearRightMotor back right motor.
      */
-    public DriveTrain(MotorControl frontLeftMotor, MotorControl frontRightMotor, MotorControl rearLeftMotor, MotorControl rearRightMotor) {
+    public LSDrive(LSMotor frontLeftMotor, LSMotor frontRightMotor, LSMotor rearLeftMotor, LSMotor rearRightMotor) {
 
         FL = frontLeftMotor;
         FR = frontRightMotor;
@@ -69,8 +69,8 @@ final public class DriveTrain {
      * @param rearLeftMotor back left motor.
      * @param rearRightMotor back right motor.
      */
-    public DriveTrain(DcMotor frontLeftMotor, DcMotor frontRightMotor, DcMotor rearLeftMotor, DcMotor rearRightMotor) {
-        this(new MotorControl(frontLeftMotor), new MotorControl(frontRightMotor), new MotorControl(rearLeftMotor),new MotorControl(rearRightMotor));
+    public LSDrive(DcMotor frontLeftMotor, DcMotor frontRightMotor, DcMotor rearLeftMotor, DcMotor rearRightMotor) {
+        this(new LSMotor(frontLeftMotor), new LSMotor(frontRightMotor), new LSMotor(rearLeftMotor),new LSMotor(rearRightMotor));
     }
 
     /**
@@ -78,18 +78,18 @@ final public class DriveTrain {
      * @param leftMotor
      * @param rightMotor
      */
-    public DriveTrain(DcMotor leftMotor, DcMotor rightMotor) {
-        this(new MotorControl(leftMotor), new MotorControl(rightMotor));
+    public LSDrive(DcMotor leftMotor, DcMotor rightMotor) {
+        this(new LSMotor(leftMotor), new LSMotor(rightMotor));
     }
 
 
     /**
-     * Constructor for 2WD using MotorControl
+     * Constructor for 2WD using LSMotor
      * @param leftMotor
      * @param rightMotor
      */
     //Constructor for 2WD
-    public DriveTrain(MotorControl leftMotor, MotorControl rightMotor) {
+    public LSDrive(LSMotor leftMotor, LSMotor rightMotor) {
 
         BL = leftMotor;
         BR = rightMotor;
@@ -99,7 +99,7 @@ final public class DriveTrain {
 
     /**
      * Set wheel mode.
-     * @param wheelMode To set which mode it is. There's DriveTrain.WheelMode for you to pass in.
+     * @param wheelMode To set which mode it is. There's LSDrive.WheelMode for you to pass in.
      */
     public void setWheelMode(int wheelMode) {
         if(wheelMode >= 0 && wheelMode <= 2) {this.wheelMode = wheelMode;}
@@ -245,7 +245,7 @@ final public class DriveTrain {
 
     /**
      *
-     * @return whether the DriveTrain is 4WD.
+     * @return whether the LSDrive is 4WD.
      */
     public boolean get4WDStat() {return is4WD;}
 }

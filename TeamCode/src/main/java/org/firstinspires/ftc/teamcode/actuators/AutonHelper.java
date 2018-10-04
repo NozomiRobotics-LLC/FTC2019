@@ -12,15 +12,15 @@ final public class AutonHelper {
 
     private final ElapsedTime stageTime = new ElapsedTime();
     private final LinearOpMode opModeObj;
-    private final DriveTrain driveObj;
+    private final LSDrive driveObj;
     private boolean isMecanum;
 
     /**
      * Constructor
      * @param opMode the LinearOpMode object from your class extended from LinearOpMode
-     * @param driveTrainObject The DriveTrain object you initialized to drive the robot
+     * @param driveTrainObject The LSDrive object you initialized to drive the robot
      */
-    public AutonHelper(LinearOpMode opMode, DriveTrain driveTrainObject) {
+    public AutonHelper(LinearOpMode opMode, LSDrive driveTrainObject) {
         opModeObj = opMode;
         driveObj = driveTrainObject;
     }
@@ -46,12 +46,12 @@ final public class AutonHelper {
 
     /**
      * Moves a motor.
-     * @param motor the MotorControl object you want to control
+     * @param motor the LSMotor object you want to control
      * @param speed the speed for the motor
      * @param time the time for moving the motor
      * @return
      */
-    public boolean runMotor(MotorControl motor,double speed,double time) {
+    public boolean runMotor(LSMotor motor, double speed, double time) {
 
         stageTime.reset();
 

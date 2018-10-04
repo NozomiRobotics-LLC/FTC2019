@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
-final public class VuforiaControl {
+final public class LSVuforia {
 
     public static class Positions {
         final public static int LEFT = 0;
@@ -26,7 +26,7 @@ final public class VuforiaControl {
     private VuforiaTrackables relicTrackables;
 
 
-    public VuforiaControl(HardwareMap hardwareMap, boolean isBackCamera, boolean isMonitorUsed,String licenseKey) {
+    public LSVuforia(HardwareMap hardwareMap, boolean isBackCamera, boolean isMonitorUsed, String licenseKey) {
 
 
         //Determine whether using the camera monitor mode
