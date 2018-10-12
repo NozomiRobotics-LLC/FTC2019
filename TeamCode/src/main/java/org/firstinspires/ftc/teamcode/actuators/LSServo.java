@@ -13,7 +13,7 @@ final public class LSServo {
     //private static Servo servoObj = null;
     private double  minPos;
     private double  maxPos;
-    private double  speedLimit  = 0.09;
+    private double  speedLimit  = 0.1;
     private boolean isContinuous = false;
     private Servo servo;
 
@@ -63,16 +63,22 @@ final public class LSServo {
         }
     }
 
-    //Note that this method only works with continuous mode, and it's scaled from -1 to 1
+    //The input is scaled from -1 to 1
     public void moveRotational(double speed) {
-        if(speed < -1) {
+
+        if (speed < -1) {
             speed = -1;
-        }
-        else if(speed > 1) {
+        } else if (speed > 1) {
             speed = 1;
         }
 
-        move(scale(-1,1,speed,minPos,maxPos));
+        if(isContinuous) {
+
+            move(scale(-1, 1, speed, minPos, maxPos));
+        }
+        else {
+            move(getPos() + scale(-1, 1, speed, minPos, maxPos) * speedLimit);
+        }
     }
 
     //Other assisting methods

@@ -20,15 +20,15 @@ public class StemA extends LinearOpMode {
         ElapsedTime runtime = new ElapsedTime();
 
         LSDrive chassis = new LSDrive(new LSMotor(hardwareMap, "front_left_motor"),
-                                      new LSMotor(hardwareMap, "front_right_motor"));
+                new LSMotor(hardwareMap, "front_right_motor"));
         LSGamepad gp1 = new LSGamepad(gamepad1);
-        LSMotor intake = new LSMotor(hardwareMap, "intake");
-        LSMotor arm   = new LSMotor(hardwareMap, "arm");
-        LSServo thrower = new LSServo(hardwareMap, "thrower",true,0, 1);
-
-        thrower.setContinuous(true);
-
+        LSMotor arm = new LSMotor(hardwareMap, "arm");
         chassis.setWheelMode(LSDrive.WheelMode.NORMAL_WHEEL);
+
+        int armMin = 0, armMax = 15500;
+
+        boolean isArmFree = false;
+        boolean isArmChecked = true;
 
 
         telemetry.addLine("Sucessfully Initialized.");
@@ -42,37 +42,49 @@ public class StemA extends LinearOpMode {
 
             //Basic Driving
             if (gp1.isKeysChanged(LSGamepad.LT, LSGamepad.RT, LSGamepad.jLeftX)) {
-                chassis.drive(0, gp1.getValue(LSGamepad.RT) - gp1.getValue(LSGamepad.LT), gp1.getValue(LSGamepad.jLeftX));
+                chassis.drive(0, -gp1.getValue(LSGamepad.RT) + gp1.getValue(LSGamepad.LT), gp1.getValue(LSGamepad.jLeftX));
             }
 
-            //Intake
-            if (gp1.isKeyChanged(LSGamepad.A) || gp1.isKeyChanged(LSGamepad.B)) {
-
-                if (gp1.isKeyHeld(LSGamepad.A) && gp1.isKeyHeld(LSGamepad.B)) {
-                    intake.move(0);
-                }
-                else if (gp1.isKeyHeld(LSGamepad.A)) {
-                    intake.move(1);
-                }
-                else if (gp1.isKeyHeld(LSGamepad.B)) {
-                    intake.move(-1);
-                }
+            if (gp1.isKeyToggled(LSGamepad.Y)) {
+                isArmFree = !isArmFree;
             }
 
-            //Arm motor
-            if(gp1.isKeyChanged(LSGamepad.dPadUp) || gp1.isKeyChanged(LSGamepad.dPadDown)) {
-
-                arm.move(gp1.getValue(LSGamepad.dPadUp) - gp1.getValue(LSGamepad.dPadDown));
-                //You need to move to another direction slowly for keeping the cube face up
-                thrower.moveRotational((gp1.getValue(LSGamepad.dPadUp) - gp1.getValue(LSGamepad.dPadDown)) * -0.1);
-
+            if (gp1.isKeyToggled(LSGamepad.LB)) {
+                armMin = arm.getPosition();
+                isArmChecked = false;
+            }
+            if (gp1.isKeyToggled(LSGamepad.RB)) {
+                armMax = arm.getPosition();
+                isArmChecked = false;
             }
 
-            //Now the hardest part, the "thrower"
+            //Check Arm bounds
+            if (!isArmChecked) {
+                if (armMax < armMin) {
+                    int temp = armMax;
+                    armMax = armMin;
+                    armMin = temp;
+                }
+                isArmChecked = true;
+            }
 
-            if(gp1.isKeyChanged(LSGamepad.jRightY)) {
-                thrower.moveRotational(gp1.getValue(LSGamepad.jRightY) * 0.5);
-           }
+            double speed = -gp1.getValue(LSGamepad.jRightY);
+            double reading = arm.getPosition();
+
+            //Free Mode
+            if (isArmFree) {
+                arm.move(speed);
+            } else if (reading >= armMax) {
+                arm.move(speed > 0 ? 0 : speed);
+            } else if (reading <= armMin) {
+                arm.move(speed < 0 ? 0 : speed);
+            } else {
+                arm.move(speed);
+            }
+            telemetry.addLine("Arm encoder reading: " + arm.getPosition());
+            telemetry.addLine("Arm lower bound: " + armMin);
+            telemetry.addLine("Arm higher bound: " + armMax);
+            telemetry.update();
         }
 
         telemetry.addLine("Robot Stopped");
