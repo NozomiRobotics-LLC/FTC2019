@@ -95,6 +95,7 @@ final public class LSDrive {
         BR = rightMotor;
 
         is4WD = false;
+        setWheelMode(0);
     }
 
     /**
@@ -132,7 +133,7 @@ final public class LSDrive {
      */
     public void tankDrive(double forwardBack, double rotation) {
 
-        rotation = -rotation; // FTC 2018 tuning
+        if(forwardBack > 0) rotation = -rotation; // FTC 2018 tuning
 
         //Calculate Adequate Power Level for motors
         rearLeftPower = Range.clip(forwardBack + rotation, -1.0, 1.0);

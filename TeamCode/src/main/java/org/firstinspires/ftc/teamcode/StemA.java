@@ -25,7 +25,7 @@ public class StemA extends LinearOpMode {
         LSMotor arm = new LSMotor(hardwareMap, "arm");
         chassis.setWheelMode(LSDrive.WheelMode.NORMAL_WHEEL);
 
-        int armMin = 0, armMax = 15500;
+        int armMin = 3000, armMax = 15500;
 
         boolean isArmFree = false;
         boolean isArmChecked = true;
@@ -84,6 +84,8 @@ public class StemA extends LinearOpMode {
             telemetry.addLine("Arm encoder reading: " + arm.getPosition());
             telemetry.addLine("Arm lower bound: " + armMin);
             telemetry.addLine("Arm higher bound: " + armMax);
+            telemetry.addLine("Left Wheel: " + chassis.getSpeed(LSDrive.Wheels.REAR_LEFT));
+            telemetry.addLine("Right Wheel: " + chassis.getSpeed(LSDrive.Wheels.REAR_RIGHT));
             telemetry.update();
         }
 
