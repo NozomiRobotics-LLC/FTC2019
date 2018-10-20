@@ -6,13 +6,7 @@ package org.firstinspires.ftc.teamcode.actuators;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-/**
- * This LSGamepad class is copied from GamepadB in LBYPatrick/2018Robot
- * (Which would be merged to LSRobotics/2018Robot when FRC 2018 ended)
- * Some small changes has been made due to different APIs in FTC
- */
-
-final public class LSGamepad {
+final public class XboxController {
 
     final private static int NUM_PRECISE_KEY = 6;
     final private static int NUM_NORMAL_KEY = 14;
@@ -63,7 +57,7 @@ final public class LSGamepad {
      * Constructor.
      * @param gamepad The original Gamepad object(which is going to be "gamepad1" or "gamepad2" in FTC).
      */
-    public LSGamepad(Gamepad gamepad) {
+    public XboxController(Gamepad gamepad) {
         xGP = gamepad;
         for(int i = 0; i < state.length; ++i) { state[i] = false; }
     }

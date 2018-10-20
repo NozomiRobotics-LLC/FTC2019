@@ -5,13 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
 import org.firstinspires.ftc.teamcode.actuators.Motor;
 import org.firstinspires.ftc.teamcode.actuators.XboxController;
-import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
+import org.firstinspires.ftc.teamcode.actuators.IMU;
 
-@TeleOp(name = "Stem A", group = "Linear opmode")
+@TeleOp(name = "Stem A(Experimental)", group = "Linear opmode")
 
-public class StemA extends LinearOpMode {
+public class StemA_Exp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -22,6 +23,7 @@ public class StemA extends LinearOpMode {
                 new Motor(hardwareMap, "front_right_motor"));
         XboxController gp1 = new XboxController(gamepad1);
         Motor arm = new Motor(hardwareMap, "arm");
+        IMU revHub = new IMU(hardwareMap);
         chassis.setWheelMode(DriveTrain.WheelMode.NORMAL_WHEEL);
 
         int armMin = 3000, armMax = 15500;
@@ -37,6 +39,7 @@ public class StemA extends LinearOpMode {
         runtime.reset();
 
         while (opModeIsActive()) {
+
             gp1.updateStatus();
 
             //Basic Driving
@@ -80,12 +83,18 @@ public class StemA extends LinearOpMode {
             } else {
                 arm.move(speed);
             }
+
+            IMU.IMUData dataBuffer = revHub.getAll();
+
             telemetry.addData("Arm encoder reading",arm.getPosition());
             telemetry.addData("Arm lower bound",armMin);
             telemetry.addData("Arm higher bound: ",armMax);
             telemetry.addData("Left Wheel: ",chassis.getSpeed(DriveTrain.Wheels.REAR_LEFT));
             telemetry.addData("Right Wheel: ",chassis.getSpeed(DriveTrain.Wheels.REAR_RIGHT));
             telemetry.addData("Left Joystick X",gp1.getValue(XboxController.jLeftX));
+            telemetry.addData("X acc", dataBuffer.xAccel);
+            telemetry.addData("Y acc", dataBuffer.yAccel);
+            telemetry.addData("Z acc",dataBuffer.zAccel);
             telemetry.update();
         }
 
