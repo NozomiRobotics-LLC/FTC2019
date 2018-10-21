@@ -30,16 +30,18 @@ final public class DriveTrain {
     private              double  rearLeftPower      = 0;
     private              double  rearRightPower     = 0;
     private              boolean is4WD              = false;
-    private              int wheelMode = 1; //OMNI_WHEEL as default
+    private              WheelMode wheelMode = WheelMode.OMNI; //Omni as default
 
     /**
      * Drive Mode, can be Tank, Omni or Mecanum.
      */
-    public class WheelMode {
-        final public static int NORMAL_WHEEL = 0,
-                          OMNI_WHEEL = 1,
-                          MECANUM_WHEEL = 2;
+    public enum WheelMode {
+        NORMAL,
+        OMNI,
+        MECANUM,
+        HYBRID_OMNI_TANK,
     }
+
 
     /**
      * Constructor for 4WD Mode using Motor class.
@@ -96,15 +98,15 @@ final public class DriveTrain {
         BR.setReverse(true);
 
         is4WD = false;
-        setWheelMode(0);
+        setWheelMode(WheelMode.NORMAL);
     }
 
     /**
      * Set wheel mode.
      * @param wheelMode To set which mode it is. There's DriveTrain.WheelMode for you to pass in.
      */
-    public void setWheelMode(int wheelMode) {
-        if(wheelMode >= 0 && wheelMode <= 2) {this.wheelMode = wheelMode;}
+    public void setWheelMode(WheelMode wheelMode) {
+        this.wheelMode = wheelMode;
     }
 
     /**
@@ -115,15 +117,16 @@ final public class DriveTrain {
      */
     public void drive(double sideMove, double forwardBack, double rotation) {
         switch(wheelMode) {
-            case WheelMode.NORMAL_WHEEL:
+            case NORMAL:
                 tankDrive(forwardBack,rotation);
                 break;
 
-            case WheelMode.OMNI_WHEEL:
+            case OMNI:
                 omniDrive(sideMove,forwardBack,rotation);
                 break;
-            case WheelMode.MECANUM_WHEEL:
+            case MECANUM:
                 mecanumDrive(sideMove,forwardBack,rotation);
+
         }
     }
 
@@ -226,8 +229,8 @@ final public class DriveTrain {
             case FRONT_RIGHT : return FL.getCurrentPosition();
             case REAR_LEFT   : return BL.getCurrentPosition();
             case REAR_RIGHT  : return BR.getCurrentPosition();
-            default          : return 666; // Actually won't happen because the enum has already limited the actual parameter
         }
+        return 256;
     }
 
     /**
@@ -241,8 +244,8 @@ final public class DriveTrain {
             case FRONT_RIGHT : return FL.getPower();
             case REAR_LEFT   : return BL.getPower();
             case REAR_RIGHT  : return BR.getPower();
-            default          : return 666; // Won't happen because of the enum in parameter
-        }
+            }
+        return 256;
     }
 
     /**
@@ -250,4 +253,33 @@ final public class DriveTrain {
      * @return whether the DriveTrain is 4WD.
      */
     public boolean get4WDStat() {return is4WD;}
+
+    /**
+     * Omni + Tank hybrid drive (front omni, back tank)
+     * @param forwardBack
+     * @param rotation
+     */
+
+    public void omniTankDrive(double forwardBack, double rotation) {
+
+        rearLeftPower = Range.clip(forwardBack + rotation, -1.0, 1.0);
+        rearRightPower = Range.clip(forwardBack - rotation, -1.0, 1.0);
+
+        frontLeftPower = forwardBack;
+        frontRightPower = forwardBack;
+
+        FL.move(frontLeftPower);
+        FR.move(frontRightPower);
+        BL.move(rearLeftPower);
+        BR.move(rearRightPower);
+    }
+
+    /**
+     * Pretty self-explanatory...
+     * @return wheel mode.
+     */
+
+    public WheelMode getWheelMode() {
+        return wheelMode;
+    }
 }

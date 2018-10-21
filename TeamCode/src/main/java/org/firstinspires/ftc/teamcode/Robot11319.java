@@ -31,11 +31,10 @@ public class Robot11319 {
                                     new Motor(hardwareMap,"rear_right"));
         gp1 = new XboxController(gamepad1);
 
-        driveTrain.setWheelMode(DriveTrain.WheelMode.MECANUM_WHEEL);
     }
 
-    public static void setChassis(int mode) {
-        driveTrain.setWheelMode(mode);
+    public static void setChassis(DriveTrain.WheelMode mode) {
+        driveTrain.setWheelMode(DriveTrain.WheelMode.HYBRID_OMNI_TANK);
     }
 
     public static void
@@ -62,12 +61,30 @@ public class Robot11319 {
     }
 
     public static void teleopPeriodic() {
-        if(gp1.isKeysChanged(XboxController.jLeftY,XboxController.jLeftX,XboxController.RT,XboxController.LT)) {
-            double xSpeed = gp1.getValue(XboxController.jLeftX);
-            double ySpeed = - gp1.getValue(XboxController.jLeftY);
-            double rotation = - (gp1.getValue(XboxController.RT) - gp1.getValue(XboxController.LT));
-            driveTrain.drive(xSpeed,ySpeed,rotation);
+
+        //Drive Control
+        switch(driveTrain.getWheelMode()) {
+            case OMNI:
+            case MECANUM:
+                if (gp1.isKeysChanged(XboxController.jLeftY, XboxController.jLeftX, XboxController.RT, XboxController.LT)) {
+                    double xSpeed = gp1.getValue(XboxController.jLeftX);
+                    double ySpeed = -gp1.getValue(XboxController.jLeftY);
+                    double rotation = -(gp1.getValue(XboxController.RT) - gp1.getValue(XboxController.LT));
+                    driveTrain.drive(xSpeed, ySpeed, rotation);
+                }
+                break;
+
+            case NORMAL:
+            case HYBRID_OMNI_TANK:
+                if(gp1.isKeysChanged(XboxController.RT,XboxController.LT,XboxController.jLeftX)) {
+                    double rotation = gp1.getValue(XboxController.jLeftX);
+                    double ySpeed   = gp1.getValue(XboxController.LT) - gp1.getValue(XboxController.RT);
+                    driveTrain.drive(0,ySpeed,rotation);
+                }
+                break;
         }
+
+
     }
 
 }

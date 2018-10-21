@@ -24,7 +24,7 @@ public class StemA_Exp extends LinearOpMode {
         XboxController gp1 = new XboxController(gamepad1);
         Motor arm = new Motor(hardwareMap, "arm");
         IMU revHub = new IMU(hardwareMap);
-        chassis.setWheelMode(DriveTrain.WheelMode.NORMAL_WHEEL);
+        chassis.setWheelMode(DriveTrain.WheelMode.NORMAL);
 
         int armMin = 3000, armMax = 15500;
 
