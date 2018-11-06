@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.actuators;
 
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 /**
@@ -10,20 +11,21 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Motor {
 
-            private     double  speedLimit = 1.0;
-            private     double  motorSpeed = 0;
-            private     DcMotor motor;
-            private     boolean isForward = true;
+    public enum OpMode {
+        ENCODER,
+        POWER
+    }
+
+    private double speedLimit = 1.0;
+    private OpMode opMode = Motor.OpMode.POWER;
+    private DcMotor motor;
+
+    //Constructors
 
     public Motor(DcMotor dcMotorObj, boolean isForward) {
 
         motor = dcMotorObj;
         motor.setDirection(DcMotor.Direction.FORWARD);
-        this.isForward = isForward;
-    }
-
-    public void setReverse(boolean isReverse) {
-        this.isForward = !isReverse;
     }
 
     public Motor(DcMotor dcMotorObj) {
@@ -35,22 +37,46 @@ public class Motor {
     }
 
     public Motor(HardwareMap hwMap, String deviceName, boolean isForward) {
-        this(hwMap.dcMotor.get(deviceName),isForward);
+        this(hwMap.dcMotor.get(deviceName), isForward);
     }
 
-    private double getLimitedSpeed(double rawSpeed) {return rawSpeed * speedLimit;}
 
-    public void moveWithButton(boolean up, boolean down) {
+    //Setters
 
-        if (up == down) motor.setPower(0);
-        else { motor.setPower(getLimitedSpeed(up? 1 : -1)); }
+    public void setOpMode(OpMode opMode) {
+        this.opMode = opMode;
+        switch (opMode) {
+            case ENCODER:
+                motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                break;
+            case POWER:
+                motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                break;
+        }
     }
 
-    public void move(double value) {
-        motor.setPower(getLimitedSpeed(value)*(isForward? 1 : -1));
+    public void setReverse(boolean isReverse) {
+        motor.setDirection(isReverse ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
     }
 
-    public double getPower() { return motor.getPower(); }
+    public void setSpeedLimit(double speed) {
+        speedLimit = speed;
+    }
+
+    //Getters
+
+    private double getLimitedSpeed(double rawSpeed) {
+        return rawSpeed * speedLimit;
+    }
+
+    public boolean isMotorBusy() {
+        return motor.isBusy();
+    }
+
+    public double getPower() {
+        return motor.getPower();
+    }
 
     public double getSpeed() {
         return getPower();
@@ -64,5 +90,32 @@ public class Motor {
         return getPosition();
     }
 
-    public void updateSpeedLimit(double speed) { speedLimit = speed; }
+
+    //Others
+
+    public void moveWithButton(boolean up, boolean down) {
+
+        if (up == down) motor.setPower(0);
+        else {
+            motor.setPower(getLimitedSpeed(up ? 1 : -1));
+        }
+    }
+
+    public void moveWithEncoder(double speed, int location) {
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        motor.setTargetPosition(motor.getCurrentPosition() + location);
+
+        motor.setPower(Math.abs(speed));
+    }
+
+    public void move(double value) {
+
+        if (opMode != OpMode.POWER) {
+            setOpMode(OpMode.POWER);
+        }
+
+        motor.setPower(getLimitedSpeed(value));
+    }
 }

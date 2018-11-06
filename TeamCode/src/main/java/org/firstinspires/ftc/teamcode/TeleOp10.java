@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
 
-@TeleOp(name = "HybridDrive10 TeleOp", group = "HybridDrive10")
+@TeleOp(name = "TeleOp10 TeleOp", group = "TeleOp10")
 
-public class HybridDrive10 extends LinearOpMode {
+public class TeleOp10 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -16,7 +16,7 @@ public class HybridDrive10 extends LinearOpMode {
 
         Robot11319.init(this,hardwareMap,telemetry,gamepad1);
 
-        Robot11319.setChassis(DriveTrain.WheelMode.HYBRID_OMNI_TANK);
+        Robot11319.setChassis(DriveTrain.WheelMode.NORMAL);
 
         Robot11319.runTeleOp();
 
