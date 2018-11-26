@@ -30,8 +30,6 @@ final public class RGBSensor {
         //Update color sensor data
         updateColorData();
 
-        Color.RGBToHSV((redVal * 255) / 800, (greenVal * 255) / 800, (blueVal * 255) / 800, hsvValue);
-
         if(hsvValue[1] > 0.6) {
             if (hsvValue[0] >= 210 && hsvValue[0] <= 275) return BallColor.BLUE;
             else if (hsvValue[0] >= 330 || hsvValue[0] <= 40) return BallColor.RED;
@@ -40,11 +38,21 @@ final public class RGBSensor {
         return BallColor.UNKNOWN;
     }
 
+    public float [] getHsvValue() {
+
+        updateColorData();
+
+        return hsvValue;
+    }
+
     public void updateColorData() {
         device.enableLed(true);
         redVal = device.red();
         greenVal = device.green();
         blueVal = device.blue();
         device.enableLed(false);
+
+        Color.RGBToHSV((redVal * 255) / 800, (greenVal * 255) / 800, (blueVal * 255) / 800, hsvValue);
+
     }
 }

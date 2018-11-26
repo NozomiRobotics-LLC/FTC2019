@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.actuators.Motor;
-import org.firstinspires.ftc.teamcode.actuators.XboxController;
+import org.firstinspires.ftc.teamcode.actuators.XboxGP;
 import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
 
 @TeleOp(name = "Stem A", group = "Linear opmode")
@@ -20,7 +20,7 @@ public class StemA extends LinearOpMode {
 
         DriveTrain chassis = new DriveTrain(new Motor(hardwareMap, "front_left_motor"),
                 new Motor(hardwareMap, "front_right_motor"));
-        XboxController gp1 = new XboxController(gamepad1);
+        XboxGP gp1 = new XboxGP(gamepad1);
         Motor arm = new Motor(hardwareMap, "arm");
         chassis.setWheelMode(DriveTrain.WheelMode.NORMAL);
 
@@ -37,22 +37,22 @@ public class StemA extends LinearOpMode {
         runtime.reset();
 
         while (opModeIsActive()) {
-            gp1.updateStatus();
+            gp1.fetchData();
 
             //Basic Driving
-            if (gp1.isKeysChanged(XboxController.LT, XboxController.RT, XboxController.jLeftX)) {
-                chassis.drive(0, -gp1.getValue(XboxController.RT) + gp1.getValue(XboxController.LT), gp1.getValue(XboxController.jLeftX));
+            if (gp1.isKeysChanged(XboxGP.LT, XboxGP.RT, XboxGP.jLeftX)) {
+                chassis.drive(0, gp1.getValue(XboxGP.RT) - gp1.getValue(XboxGP.LT), gp1.getValue(XboxGP.jLeftX));
             }
 
-            if (gp1.isKeyToggled(XboxController.Y)) {
+            if (gp1.isKeyToggled(XboxGP.Y)) {
                 isArmFree = !isArmFree;
             }
 
-            if (gp1.isKeyToggled(XboxController.LB)) {
+            if (gp1.isKeyToggled(XboxGP.LB)) {
                 armMin = arm.getPosition();
                 isArmChecked = false;
             }
-            if (gp1.isKeyToggled(XboxController.RB)) {
+            if (gp1.isKeyToggled(XboxGP.RB)) {
                 armMax = arm.getPosition();
                 isArmChecked = false;
             }
@@ -67,7 +67,7 @@ public class StemA extends LinearOpMode {
                 isArmChecked = true;
             }
 
-            double speed = -gp1.getValue(XboxController.jRightY);
+            double speed = -gp1.getValue(XboxGP.jRightY);
             double reading = arm.getPosition();
 
             //Free Mode
@@ -85,7 +85,7 @@ public class StemA extends LinearOpMode {
             telemetry.addData("Arm higher bound: ",armMax);
             telemetry.addData("Left Wheel: ",chassis.getSpeed(DriveTrain.Wheels.REAR_LEFT));
             telemetry.addData("Right Wheel: ",chassis.getSpeed(DriveTrain.Wheels.REAR_RIGHT));
-            telemetry.addData("Left Joystick X",gp1.getValue(XboxController.jLeftX));
+            telemetry.addData("Left Joystick X",gp1.getValue(XboxGP.jLeftX));
             telemetry.update();
         }
 

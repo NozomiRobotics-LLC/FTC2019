@@ -14,9 +14,9 @@ public class TeleOp10 extends LinearOpMode {
     public void runOpMode() {
 
 
-        Robot11319.init(this,hardwareMap,telemetry,gamepad1);
+        Robot11319.init(this);
 
-        Robot11319.setChassis(DriveTrain.WheelMode.NORMAL);
+        Robot11319.setChassis(DriveTrain.WheelMode.HYBRID_OMNI_TANK);
 
         Robot11319.runTeleOp();
 
