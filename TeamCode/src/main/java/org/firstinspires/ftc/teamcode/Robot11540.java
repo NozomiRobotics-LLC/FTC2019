@@ -9,14 +9,13 @@ import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
 import org.firstinspires.ftc.teamcode.actuators.Motor;
 import org.firstinspires.ftc.teamcode.actuators.XboxGP;
 
-public class Robot11319 {
+public class Robot11540 {
 
     static LinearOpMode opMode;
     static HardwareMap hwMap;
     static Telemetry telemetry;
     static DriveTrain driveTrain;
     static XboxGP gp1,gp2;
-    static Motor arm, sweeper;
     static boolean hasGP2 = false;
 
     public static void
@@ -32,14 +31,12 @@ public class Robot11319 {
                                     new Motor(hwMap,"rear_right"));
         gp1 = new XboxGP(opMode.gamepad1);
 
-        arm = new Motor(hwMap, "arm");
-        sweeper = new Motor(hwMap, "sweeper");
-
+        driveTrain.setWheelMode(DriveTrain.WheelMode.NORMAL);
     }
 
     public static void
     setChassis(DriveTrain.WheelMode mode) {
-        driveTrain.setWheelMode(DriveTrain.WheelMode.HYBRID_OMNI_TANK);
+        driveTrain.setWheelMode(mode);
     }
 
     public static void
@@ -57,6 +54,9 @@ public class Robot11319 {
 
         opMode.waitForStart();
 
+        telemetry.addData("Status","Running");
+        telemetry.update();
+
         while(opMode.opModeIsActive()) {
             teleopPeriodic();
         }
@@ -69,31 +69,28 @@ public class Robot11319 {
     teleopPeriodic() {
         gp1.fetchData();
         drive();
-        actuate();
+        configure();
+        //actuate();
+    }
+
+    static private void
+    configure() {
+        if(gp1.isKeyToggled(XboxGP.LB)) {
+            driveTrain.setWheelMode(driveTrain.getWheelMode() == DriveTrain.WheelMode.HYBRID_OMNI_TANK
+                    ? DriveTrain.WheelMode.NORMAL
+                    : DriveTrain.WheelMode.HYBRID_OMNI_TANK);
+        }
+
+        if(gp1.isKeyToggled(XboxGP.RB)) {
+             driveTrain.flipHead();
+        }
+
     }
 
     static private void
     actuate() {
 
-        boolean isSweeperMove = gp1.isKeyHeld(XboxGP.A);
-        //Arm
-        if(gp1.isKeyHeld(XboxGP.dPadUp) != gp1.isKeyHeld(XboxGP.dPadDown)) {
-            boolean isUp = gp1.isKeyHeld(XboxGP.dPadUp);
-            arm.moveWithButton(isUp, !isUp);
-        }
-        else {
-            arm.moveWithButton(false,false);
-        }
-
-        //Sweeper
-        if(gp1.isKeyHeld(XboxGP.A) != gp1.isKeyHeld(XboxGP.B)) {
-            sweeper.moveWithButton(isSweeperMove, !isSweeperMove);
-        }
-        else if(!isSweeperMove) {
-            sweeper.moveWithButton(false,false);
-        }
     }
-
     static private void
     drive() {
         //Drive Control
@@ -114,6 +111,7 @@ public class Robot11319 {
                     double rotation = gp1.getValue(XboxGP.jLeftX);
                     double ySpeed = gp1.getValue(XboxGP.RT) - gp1.getValue(XboxGP.LT);
                     driveTrain.drive(0, ySpeed, rotation);
+                    telemetry.update();
                 }
                 break;
         }

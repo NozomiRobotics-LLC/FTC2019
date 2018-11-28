@@ -46,7 +46,6 @@ final public class DriveTrain {
         FR = frontRightMotor;
         BL = rearLeftMotor;
         BR = rearRightMotor;
-
         FR.setReverse(true);
         BR.setReverse(true);
 
@@ -97,6 +96,20 @@ final public class DriveTrain {
         return 256;
     }
 
+    public Motor getWheel(Wheels position) {
+        switch(position) {
+            case FRONT_LEFT:
+                return FL;
+            case FRONT_RIGHT:
+                return FR;
+            case REAR_LEFT:
+                return BL;
+            case REAR_RIGHT:
+                return BR;
+        }
+        return null;
+    }
+
     public double getSpeed(Wheels position) {
         switch (position) {
             case FRONT_LEFT:
@@ -135,13 +148,26 @@ final public class DriveTrain {
             case NORMAL:
                 tankDrive(forwardBack, rotation);
                 break;
-
             case OMNI:
                 omniDrive(sideMove, forwardBack, rotation);
                 break;
             case MECANUM:
                 mecanumDrive(sideMove, forwardBack, rotation);
+                break;
+            case HYBRID_OMNI_TANK:
+                omniTankDrive(forwardBack,rotation);
+                break;
+        }
+    }
 
+    public void flipHead() {
+
+        BL.setReverse(!BL.isReverse());
+        BR.setReverse(!BR.isReverse());
+
+        if(is4WD) {
+            FL.setReverse(!FL.isReverse());
+            FR.setReverse(!FR.isReverse());
         }
     }
 

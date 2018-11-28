@@ -118,4 +118,8 @@ public class Motor {
 
         motor.setPower(getLimitedSpeed(value));
     }
+
+    public boolean isReverse() {
+        return motor.getDirection() == DcMotor.Direction.REVERSE;
+    }
 }

@@ -2,24 +2,22 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
 
-@TeleOp(name = "TeleOp10 TeleOp", group = "TeleOp10")
+@TeleOp(name = "TeleOp9", group = "Linear opmode")
 
-public class TeleOp10 extends LinearOpMode {
+public class TeleOp9 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
 
 
-        Robot11319.init(this);
+        Robot11540.init(this);
 
-        Robot11319.setChassis(DriveTrain.WheelMode.HYBRID_OMNI_TANK);
+        Robot11540.setChassis(DriveTrain.WheelMode.HYBRID_OMNI_TANK);
 
-        Robot11319.runTeleOp();
-
+        Robot11540.runTeleOp();
     }
 
 }
