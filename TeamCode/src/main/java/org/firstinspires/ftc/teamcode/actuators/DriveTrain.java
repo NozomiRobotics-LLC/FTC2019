@@ -173,8 +173,6 @@ final public class DriveTrain {
 
     public void tankDrive(double forwardBack, double rotation) {
 
-        rotation = -rotation;
-
         //Calculate Adequate Power Level for motors
         rearLeftPower = Range.clip(forwardBack + rotation, -1.0, 1.0);
         rearRightPower = Range.clip(forwardBack - rotation, -1.0, 1.0);
@@ -227,8 +225,8 @@ final public class DriveTrain {
         rearLeftPower = Range.clip(forwardBack + rotation, -1.0, 1.0);
         rearRightPower = Range.clip(forwardBack - rotation, -1.0, 1.0);
 
-        frontLeftPower = forwardBack;
-        frontRightPower = forwardBack;
+        frontLeftPower = Range.clip(forwardBack - rotation, -1.0, 1.0);;
+        frontRightPower = Range.clip(forwardBack + rotation, -1.0, 1.0);;
 
         FL.move(frontLeftPower);
         FR.move(frontRightPower);

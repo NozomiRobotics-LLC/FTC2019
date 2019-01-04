@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
 import org.firstinspires.ftc.teamcode.actuators.Motor;
 import org.firstinspires.ftc.teamcode.actuators.XboxGP;
 
-public class Robot11540 {
+public class Robot11319 {
 
     static LinearOpMode opMode;
     static HardwareMap hwMap;
@@ -17,7 +17,7 @@ public class Robot11540 {
     static DriveTrain driveTrain;
     static XboxGP gp1,gp2;
     static Motor  arm;
-    static Motor lift;
+    static Motor  grabber;
     static boolean hasGP2 = false;
 
     public static void
@@ -27,15 +27,13 @@ public class Robot11540 {
         hwMap  = opMode.hardwareMap;
         telemetry = opMode.telemetry;
 
-        driveTrain = new DriveTrain(new Motor(hwMap,"front_left"),
-                                    new Motor(hwMap,"front_right"),
-                                    new Motor(hwMap,"rear_left"),
-                                    new Motor(hwMap, "rear_right"));
+        driveTrain = new DriveTrain(new Motor(hwMap,"front_left_motor"),
+                                    new Motor(hwMap,"front_right_motor"));
         gp1 = new XboxGP(opMode.gamepad1);
 
-        arm = new Motor(hwMap, "arm");
+        arm = new Motor(hwMap, "forebar");
 
-        lift = new Motor(hwMap, "lift");
+        grabber = new Motor(hwMap, "rubber_band_mech");
 
         driveTrain.setWheelMode(DriveTrain.WheelMode.NORMAL);
     }
@@ -103,14 +101,14 @@ public class Robot11540 {
 
         if(gp1.isKeysChanged(XboxGP.A,XboxGP.B)) {
 
-            boolean isLiftUp = gp1.isKeyHeld(XboxGP.B);
+            boolean isGrabberForward = gp1.isKeyHeld(XboxGP.B);
 
             if(gp1.getValue(XboxGP.A) == gp1.getValue(XboxGP.B)) {
-                lift.moveWithButton(false,false);
+                grabber.moveWithButton(false,false);
             }
 
             else {
-                lift.moveWithButton(isLiftUp,!isLiftUp);
+                grabber.moveWithButton(isGrabberForward,!isGrabberForward);
             }
         }
     }
@@ -131,7 +129,7 @@ public class Robot11540 {
             case NORMAL:
             case HYBRID_OMNI_TANK:
                 if (gp1.isKeysChanged(XboxGP.RT, XboxGP.LT, XboxGP.jLeftX)) {
-                    double rotation = -gp1.getValue(XboxGP.jLeftX);
+                    double rotation = gp1.getValue(XboxGP.jLeftX);
                     double ySpeed = gp1.getValue(XboxGP.RT) - gp1.getValue(XboxGP.LT);
                     telemetry.addData("Rotation",rotation);
                     driveTrain.drive(0, ySpeed, rotation);
@@ -143,7 +141,7 @@ public class Robot11540 {
 
     static void postInfo() {
         telemetry.addData("Arm Encoder Reading",arm.getPosition());
-        telemetry.addData("Lift Encoder Reading", lift.getPosition());
+        telemetry.addData("Grabber Encoder Reading",grabber.getPosition());
         telemetry.update();
     }
 }
