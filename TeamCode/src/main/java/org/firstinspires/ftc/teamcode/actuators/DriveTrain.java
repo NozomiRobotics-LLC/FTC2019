@@ -36,8 +36,7 @@ final public class DriveTrain {
     public enum WheelMode {
         NORMAL,
         OMNI,
-        MECANUM,
-        HYBRID_OMNI_TANK,
+        MECANUM
     }
 
     public DriveTrain(Motor frontLeftMotor, Motor frontRightMotor, Motor rearLeftMotor, Motor rearRightMotor) {
@@ -154,9 +153,6 @@ final public class DriveTrain {
             case MECANUM:
                 mecanumDrive(sideMove, forwardBack, rotation);
                 break;
-            case HYBRID_OMNI_TANK:
-                omniTankDrive(forwardBack,rotation);
-                break;
         }
     }
 
@@ -172,6 +168,8 @@ final public class DriveTrain {
     }
 
     public void tankDrive(double forwardBack, double rotation) {
+
+        rotation = -rotation;
 
         //Calculate Adequate Power Level for motors
         rearLeftPower = Range.clip(forwardBack + rotation, -1.0, 1.0);
@@ -214,20 +212,6 @@ final public class DriveTrain {
         rearRightPower = r * Math.cos(robotAngle) - rotation;
 
         // Send calculated power to motors
-        FL.move(frontLeftPower);
-        FR.move(frontRightPower);
-        BL.move(rearLeftPower);
-        BR.move(rearRightPower);
-    }
-
-    public void omniTankDrive(double forwardBack, double rotation) {
-
-        rearLeftPower = Range.clip(forwardBack + rotation, -1.0, 1.0);
-        rearRightPower = Range.clip(forwardBack - rotation, -1.0, 1.0);
-
-        frontLeftPower = Range.clip(forwardBack - rotation, -1.0, 1.0);;
-        frontRightPower = Range.clip(forwardBack + rotation, -1.0, 1.0);;
-
         FL.move(frontLeftPower);
         FR.move(frontRightPower);
         BL.move(rearLeftPower);

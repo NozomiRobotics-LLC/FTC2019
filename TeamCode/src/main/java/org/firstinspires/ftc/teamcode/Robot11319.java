@@ -127,7 +127,6 @@ public class Robot11319 {
                 break;
 
             case NORMAL:
-            case HYBRID_OMNI_TANK:
                 if (gp1.isKeysChanged(XboxGP.RT, XboxGP.LT, XboxGP.jLeftX)) {
                     double rotation = gp1.getValue(XboxGP.jLeftX);
                     double ySpeed = gp1.getValue(XboxGP.RT) - gp1.getValue(XboxGP.LT);
